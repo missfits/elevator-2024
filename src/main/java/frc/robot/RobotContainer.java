@@ -2,15 +2,31 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+// frc packages
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+
 import frc.robot.commands.Autos;
+
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
+
+// wpilib commands
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
+// import subsystems
+import frc.robot.subsystems.Elevator;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
+
+// elevator commands
+import frc.robot.commands.ElevatorMoveToSetpoint;
+import frc.robot.commands.ElevatorKeepInPlace;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -21,6 +37,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private static final OI m_humanControl = new OI();
+  private static final Elevator m_elevator = new Elevator();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -30,6 +48,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+
   }
 
   /**
@@ -43,8 +62,15 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
+    // new Trigger(m_exampleSubsystem::exampleCondition)
+    //     .onTrue(new ExampleCommand(m_exampleSubsystem));
+
+    // TrapezoidProfile.State(double pos, double velocity)
+    OI.m_driverXbox.a().whileTrue(new ElevatorMoveToSetpoint(m_elevator, new TrapezoidProfile.State(0.0, 1.0)));
+    OI.m_driverXbox.b().whileTrue(new ElevatorMoveToSetpoint(m_elevator, new TrapezoidProfile.State(0.0, 1.5)));
+    OI.m_driverXbox.x().whileTrue(new ElevatorMoveToSetpoint(m_elevator, new TrapezoidProfile.State(0.0, 2.0)));
+
+    OI.m_driverXbox.y().whileTrue(new ElevatorKeepInPlace(m_elevator));
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.

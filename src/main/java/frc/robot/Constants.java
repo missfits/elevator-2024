@@ -15,5 +15,29 @@ package frc.robot;
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
+
+  }
+
+  public static class ElevatorConstants {
+    public static final int ELEVATOR_MOTOR_ID = 1;
+
+    public static final int COUNTS_PER_REV = 42; // maybe right? from offseason-2024
+    public static final double METERS_PER_ROTATION = 10; // TEMP value. should calculate
+
+    public static final double MAX_SPEED = 0; // should be m/s; TEMP value. can calculate. 
+
+    public static final double kS = 0;
+    public static final double kG = 0;
+    public static final double kV = 0;
+    public static final double kA = 0;
+
+    public static final double kP = 0;
+    public static final double kI = 0;
+    public static final double kD = 0;
+
+    public static final double kMaxV = 0;
+    public static final double kMaxA = 0;
+
+
   }
 }
