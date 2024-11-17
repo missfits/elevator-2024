@@ -27,7 +27,7 @@ public final class Constants {
     public static final double METERS_PER_ROTATION = 1.64736586187; // tentative, should reevaluate
 
     // 95.4 in/s (from website) * m/in
-    public static final double MAX_SPEED = 2.42316; // should be m/s; TEMP value. can calculate. 
+    public static final double MAX_SPEED = 2.42316; // should be m/s; tentative, should reevaluate
 
     public static final double SPEED_LOWER_LIMIT = 0.0; // TEMP value. change later
     public static final double SPEED_UPPER_LIMIT = 0.0; // TEMP value. change later
