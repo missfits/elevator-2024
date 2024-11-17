@@ -22,9 +22,15 @@ public final class Constants {
     public static final int ELEVATOR_MOTOR_ID = 1;
 
     public static final int COUNTS_PER_REV = 42; // maybe right? from offseason-2024
-    public static final double METERS_PER_ROTATION = 10; // TEMP value. should calculate
 
-    public static final double MAX_SPEED = 0; // should be m/s; TEMP value. can calculate. 
+    // 0.947 (sprocket radius) * 2 pi * 2 (carriage to chain movement) * m/in * 5.45 (gear ratio)
+    public static final double METERS_PER_ROTATION = 1.64736586187; // tentative, should reevaluate
+
+    // 95.4 in/s (from website) * m/in
+    public static final double MAX_SPEED = 2.42316; // should be m/s; TEMP value. can calculate. 
+
+    public static final double SPEED_LOWER_LIMIT = 0.0; // TEMP value. change later
+    public static final double SPEED_UPPER_LIMIT = 0.0; // TEMP value. change later
 
     public static final double kS = 0;
     public static final double kG = 0;
