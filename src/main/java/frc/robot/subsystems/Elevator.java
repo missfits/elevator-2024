@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkRelativeEncoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.Constants.ElevatorConstants;
 
@@ -43,6 +44,9 @@ public class Elevator extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Elevator/position", m_elevatorEncoder.getPosition());
+    SmartDashboard.putNumber("Elevator/velocity", m_elevatorEncoder.getVelocity());
+    SmartDashboard.putNumber("Elevator/voltage", m_elevatorMotor.getAppliedOutput()*m_elevatorMotor.getBusVoltage());
   }
 
   @Override
