@@ -19,22 +19,22 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class ElevatorMoveToSetpoint extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private Elevator m_elevator;
-  // private ElevatorFeedforward m_feedforward = new ElevatorFeedforward(
-  //   ElevatorConstants.kS,
-  //   ElevatorConstants.kG,
-  //   ElevatorConstants.kV,
-  //   ElevatorConstants.kA
-  //   );
+  private ElevatorFeedforward m_feedforward = new ElevatorFeedforward(
+    ElevatorConstants.kS,
+    ElevatorConstants.kG,
+    ElevatorConstants.kV,
+    ElevatorConstants.kA
+  );
   private PIDController m_controller = new PIDController(
     ElevatorConstants.kP,
     ElevatorConstants.kI,
     ElevatorConstants.kD
-    );
+  );
 
   private TrapezoidProfile.State m_goal;
 
   private TrapezoidProfile.Constraints m_constraints = new TrapezoidProfile.Constraints(ElevatorConstants.kMaxV, ElevatorConstants.kMaxA);
-  private TrapezoidProfile.State m_profiledReference = new TrapezoidProfile.State(m_elevator.getEncoderPosition(), m_elevator.getEncoderVelocity());
+  private TrapezoidProfile.State m_profiledReference;
   private TrapezoidProfile m_profile = new TrapezoidProfile(m_constraints);
 
 
@@ -54,7 +54,9 @@ public class ElevatorMoveToSetpoint extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_profiledReference = new TrapezoidProfile.State(m_elevator.getEncoderPosition(), m_elevator.getEncoderVelocity());
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -63,14 +65,13 @@ public class ElevatorMoveToSetpoint extends Command {
     m_profiledReference = m_profile.calculate(0.02, m_profiledReference, m_goal);
     
     // // calculate part of the power based on target velocity 
-    // double feedForwardPower = m_feedforward.calculate(m_profiledReference.velocity);
+    double feedForwardPower = m_feedforward.calculate(m_profiledReference.velocity);
 
-    // use max speed to calculate feedfoward :) 
-    double feedForwardPower = m_profiledReference.velocity / ElevatorConstants.MAX_SPEED * 12;
+    // can also use max speed to calculate feedfoward :) 
+    // double feedForwardPower = m_profiledReference.velocity / ElevatorConstants.MAX_SPEED * 12;
     
-    //calculate part of the power based on target position + current position
-    m_controller.setSetpoint(m_profiledReference.position);
-    double PIDPower = m_controller.calculate(m_elevator.getEncoderPosition());
+    // calculate part of the power based on target position + current position
+    double PIDPower = m_controller.calculate(m_elevator.getEncoderPosition(), m_profiledReference.position);
 
     m_elevator.setVoltage(feedForwardPower + PIDPower);
   }
